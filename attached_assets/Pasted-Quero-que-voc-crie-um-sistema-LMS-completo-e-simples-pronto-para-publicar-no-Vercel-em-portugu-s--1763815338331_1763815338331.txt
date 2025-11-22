@@ -1,0 +1,362 @@
+Quero que você crie um sistema LMS completo e simples, pronto para publicar no Vercel, em português do Brasil, inspirado visualmente nas telas anexas (treinamento SendFlow): fundo escuro, destaque em amarelo, tipografia limpa, cards grandes, timeline vertical de aulas e layout consistente em todas as telas.
+
+1. Tecnologia e estrutura geral
+
+Crie um projeto fullstack (frontend + backend) em Next.js com TypeScript, pronto para deploy no Vercel sem necessidade de configurações adicionais complexas.
+
+Use uma arquitetura simples:
+
+API interna para CRUD (courses, modules, lessons, users).
+
+Banco de dados simples (pode ser SQLite ou Prisma com SQLite).
+
+Todo o sistema deve estar em pt-BR (labels, botões, textos, mensagens de erro).
+
+2. Entidades principais
+
+Implemente no backend as seguintes entidades:
+
+Curso (Course)
+
+id
+
+título
+
+descrição curta
+
+imagem de capa (URL)
+
+slug
+
+status (ativo/inativo)
+
+ordem de exibição
+
+Módulo (Module)
+
+id
+
+courseId
+
+título (ex: “Primeiros passos”)
+
+descrição
+
+ordem dentro do curso
+
+Aula (Lesson)
+
+id
+
+moduleId
+
+título (ex: “Comece por aqui”)
+
+descrição
+
+url do vídeo (YouTube, Vimeo ou arquivo mp4)
+
+duração (em minutos ou texto)
+
+data de liberação (releaseAt, tipo datetime)
+
+anexos opcionais (lista de URLs para PDFs, links, etc.)
+
+ordem dentro do módulo
+
+Usuário (User)
+
+id
+
+nome
+
+e-mail
+
+senha (hash)
+
+Progresso do usuário (UserLessonProgress)
+
+userId
+
+lessonId
+
+completed (boolean)
+
+completedAt (datetime)
+
+3. Cursos iniciais já cadastrados
+
+Crie no seed (dados iniciais):
+
+Curso 1: “Minicurso Terapeuta Analista Corporal”
+
+Curso 2: “Formação Terapeuta Analista Corporal”
+
+Cada curso deve ter pelo menos 1 módulo chamado “Primeiros passos” com algumas aulas de exemplo para demonstrar o fluxo.
+
+4. Área do aluno – fluxo e telas
+4.1. Tela inicial de Treinamentos
+
+Rota: /treinamentos
+
+Cabeçalho com:
+
+Logo simples no canto esquerdo.
+
+Campo de buscar (ícone de lupa) no topo direito.
+
+Ícone de usuário com nome “Luis” como exemplo.
+
+Conteúdo principal: grid de cards de cursos, mantendo consistência com os anexos:
+
+Fundo escuro
+
+Imagem em preto e branco do celular/laptop (pode ser placeholder)
+
+Título grande: “AULAS EM PORTUGUÊS” / “Minicurso Terapeuta Analista Corporal” etc.
+
+Ao passar o mouse, mostrar linha azul na base do card, igual aos anexos.
+
+Ao clicar em um curso, abre a página interna do curso.
+
+4.2. Página interna do curso (lista de módulos e aulas)
+
+Rota: /curso/[slug]
+
+Layout dividido em duas colunas, como nos anexos:
+
+Coluna esquerda
+
+Card grande do curso com:
+
+Imagem
+
+Botão “Voltar”
+
+Barra de progresso amarela mostrando a % concluída do curso.
+
+Campo “Buscar por título da aula” (input).
+
+Botão largo azul: “Continuar de onde parei”.
+
+Coluna direita
+
+Título do módulo (ex: “Primeiros passos”).
+
+Embaixo, uma timeline vertical com as aulas:
+
+Cada aula é um item com:
+
+Bolinha grande com check amarelo se concluída.
+
+Número da aula (01, 02, 03…).
+
+Título da aula.
+
+Aulas futuras (com data de liberação no futuro) aparecem bloqueadas:
+
+Ícone de cadeado.
+
+Texto “Disponível em [data]”.
+
+Não permitem clique até a data de liberação.
+
+O sistema deve liberar cada aula automaticamente na data e hora cadastradas em releaseAt, sem necessidade de ação manual.
+
+4.3. Página da aula (player)
+
+Rota: /curso/[slug]/aula/[lessonId]
+
+Layout semelhante ao anexo “Comece por aqui”:
+
+Parte central esquerda
+
+Player de vídeo grande (com controles padrão, tempo total etc.).
+
+Título da aula logo abaixo.
+
+Seção “Descrição” com texto e, abaixo, links de anexos (PDFs, links, etc.).
+
+Botão verde grande: “Concluído” para marcar a aula como concluída.
+
+Campo de avaliação com estrelas (1–5).
+
+Seção “Comentários” com:
+
+Campo para digitar comentário.
+
+Lista de comentários (nome do usuário, data, texto).
+
+Coluna direita
+
+Um painel “Caderno de Anotações” com campo para o aluno escrever anotações pessoais da aula.
+
+Abaixo, uma lista vertical de aulas do mesmo módulo, como mini-cards com thumbnail e título (exatamente como na coluna lateral dos anexos).
+
+5. Regras de liberação por data (drip content)
+
+Implemente lógica de liberação de aulas:
+
+Cada aula tem um campo releaseAt.
+
+Se a data atual < releaseAt, a aula:
+
+Aparece bloqueada, com ícone de cadeado.
+
+Não permite abrir o player.
+
+Exibe mensagem: “Esta aula estará disponível em [data formatada]”.
+
+Quando data atual >= releaseAt, a aula é liberada automaticamente:
+
+Ícone muda de “bloqueado” para normal.
+
+Pode ser marcada como concluída.
+
+6. Área administrativa (Admin)
+
+Crie rotas protegidas para admin, por exemplo /admin:
+
+6.1. Login do admin
+
+Tela simples de login com email + senha.
+
+Exemplo de usuário admin padrão no seed.
+
+6.2. Dashboard do admin
+
+Menu lateral com itens:
+
+Cursos
+
+Módulos
+
+Aulas
+
+Usuários
+
+6.3. Gestão de cursos
+
+Listagem de cursos com:
+
+Título
+
+Quantidade de módulos
+
+Botão “Editar”
+
+Botão “Excluir”
+
+Tela de criação/edição de curso com campos:
+
+Título
+
+Descrição
+
+Imagem de capa (URL)
+
+Status (ativo/inativo)
+
+6.4. Gestão de módulos
+
+Permitir escolher o curso ao qual o módulo pertence.
+
+Campos:
+
+Título do módulo
+
+Descrição
+
+Ordem
+
+6.5. Gestão de aulas
+
+Permitir associar a aula a um curso + módulo.
+
+Campos obrigatórios:
+
+Título
+
+Descrição
+
+URL do vídeo
+
+Duração
+
+Data e hora de liberação (releaseAt) – escolher em um campo datetime.
+
+Ordem
+
+Campo para adicionar anexos (lista de URLs / uploads simples).
+
+Lista de aulas mostrando:
+
+Título
+
+Módulo
+
+Curso
+
+Data de liberação
+
+Botão “Editar” / “Excluir”.
+
+7. Visual e consistência com os anexos
+
+Use um estilo visual muito parecido com os screenshots:
+
+Tema escuro:
+
+Background principal: cinza quase preto (#111 ou similar).
+
+Cartões com cinza mais claro (#1E1E1E).
+
+Tipografia branca/cinza clara.
+
+Destaques em amarelo (botões principais, ícones de check, barra de progresso).
+
+Botões secundários em azul, como “Continuar de onde parei”.
+
+Layout consistente em todas as telas:
+
+Sempre manter:
+
+Barra superior com logo, busca e avatar do usuário.
+
+Sidebar com ícones (igual à coluna esquerda vertical dos anexos).
+
+Cards de cursos e aulas com a mesma estética de foto em preto e branco de celular/laptop.
+
+8. Modo claro/escuro
+
+Implemente um toggle de tema claro/escuro:
+
+Colocar um botão de alternância (ícone de sol/lua) no topo direito.
+
+Salvar a preferência do usuário (localStorage) para que, ao recarregar a página, o tema escolhido permaneça.
+
+No modo claro, inverta as cores mantendo o amarelo como cor de destaque.
+
+9. Versão do app no rodapé
+
+Em todas as páginas, coloque um rodapé simples com:
+
+Texto: LMS Priscilla Moreira – versão 1.0.0
+
+A versão deve ser exibida de forma discreta, alinhada à direita ou ao centro, mantendo o padrão visual do resto do sistema.
+
+10. Responsividade
+
+O layout deve ser totalmente responsivo, com:
+
+Versão desktop semelhante aos anexos.
+
+Versão mobile com:
+
+Cards em coluna única.
+
+Timeline de aulas adaptada para largura pequena.
+
+Player de vídeo ocupando toda a largura.
+
+Use todas essas instruções para gerar o código completo do projeto (frontend + backend + banco) e entregar uma LMS funcional, já com os dois cursos cadastrados, com liberação automática de aulas por data, admin para gerenciar conteúdos e visual consistente com as telas anexadas.
