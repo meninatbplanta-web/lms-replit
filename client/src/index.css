@@ -36,6 +36,8 @@
   --accent-foreground: 210 15% 12%;
   --destructive: 0 84% 45%;
   --destructive-foreground: 0 10% 98%;
+  --success: 142 71% 45%;
+  --success-foreground: 0 0% 100%;
   --input: 0 0% 75%;
   --ring: 45 95% 50%;
   --chart-1: 210 70% 45%;
@@ -120,6 +122,8 @@
   --accent-foreground: 210 15% 90%;
   --destructive: 0 72% 50%;
   --destructive-foreground: 0 10% 98%;
+  --success: 142 76% 50%;
+  --success-foreground: 0 0% 100%;
   --input: 0 0% 30%;
   --ring: 45 95% 55%;
   --chart-1: 210 85% 65%;
